@@ -49,11 +49,6 @@ export default function HeroPanel({ refreshAction }) {
     refreshAction();
   };
 
-  console.log(
-    "heroProfile[selectedHero?.value]",
-    heroProfile[selectedHero?.value]
-  );
-
   return (
     <>
       <div className={styles.panel}>
@@ -74,8 +69,10 @@ export default function HeroPanel({ refreshAction }) {
             <div className={styles.statsBox}>
               <span className={styles.indexTitle}>신화 레벨선택</span>
               <div className={styles.level}>
-                <label>Lv.</label>
+                <label htmlFor="heroLevelSelect">Lv.</label>
                 <select
+                  id="heroLevelSelect"
+                  name="heroLevelSelect"
                   value={selectedHeroLevel}
                   onChange={(e) => {
                     console.log(e.target.value);

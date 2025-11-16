@@ -83,10 +83,12 @@
 .level select {
   margin-left: 4px;
   background: transparent;
-  border: none;
+  border: 1px solid var(--default-border);
+  border-radius: 6px;
+  padding: 2px 6px;
   font-size: var(--font-medium);
   font-weight: var(--weight-bold);
-  color: var(--default-white);
+  color: var(--point-green);
   appearance: none; /* 기본 화살표 제거 (공통) */
   -webkit-appearance: none; /* Safari, Chrome */
   -moz-appearance: none; /* Firefox */
@@ -136,13 +138,11 @@
 }
 
 .effectDescItem {
-  padding: 14px;
+  padding: 6px 0;
   border-radius: 14px;
   display: flex;
   gap: 10px;
   align-items: center;
-  border: 1px solid var(--default-border);
-  background-color: var(--default-background);
 }
 
 .effectDescItem.disabled {

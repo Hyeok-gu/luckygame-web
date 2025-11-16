@@ -162,10 +162,14 @@
 }
 
 .value {
-  font-size: var(--font-medium);
+  font-size: var(--font-regular);
   line-height: var(--lineHeight-medium);
   font-weight: var(--weight-bold);
-  color: var(--default-gray);
+  color: var(--point-green);
+}
+
+.value.desc {
+  color: var(--default-white);
 }
 
 .profileArea .plusValue {

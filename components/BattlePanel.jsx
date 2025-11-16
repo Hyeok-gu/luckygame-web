@@ -40,7 +40,7 @@ export default function BattlePanel(props) {
   const [otherSpeed, setOtherSpeed] = useState(0); //모아공 공격속도%
   const [isBoss, setIsBoss] = useState(false); //보스 공격 On상태
   const [sameTarget, setSameTarget] = useState(false); //같은 대상 공격 상태
-  const [otherHeroLength, setOtherHeroLength] = useState(""); //다른 신화 종류 수
+  const [otherHeroLength, setOtherHeroLength] = useState(0); //다른 신화 종류 수
 
   //로컬스토리지에 저장된 신화 정보 가져오기
   useEffect(() => {
@@ -182,7 +182,7 @@ export default function BattlePanel(props) {
                 <div className={styles.statsBox}>
                   <span className={styles.indexTitle}>최종 공격력</span>
                   <div className={styles.valueWrapper}>
-                    <span className={styles.value}>
+                    <span className={`${styles.value} ${styles.desc}`}>
                       {heroData.defaultPower || "-"}
                     </span>
                     <span className={styles.plusValue}>
@@ -193,7 +193,7 @@ export default function BattlePanel(props) {
                 <div className={styles.statsBox}>
                   <span className={styles.indexTitle}>최종 공격속도</span>
                   <div className={styles.valueWrapper}>
-                    <span className={styles.value}>
+                    <span className={`${styles.value} ${styles.desc}`}>
                       {heroData.defaultSpeed || "-"}
                     </span>
                     <span className={styles.plusValue}>

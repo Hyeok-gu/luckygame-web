@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import RelicPanel from "@/components/RelicPanel";
 import BattlePanel from "@/components/BattlePanel";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const [battleVisible, setBattleVisible] = useState(false);
@@ -31,9 +32,18 @@ export default function Home() {
           <HeroPanel refreshAction={refreshAction} />
           <RelicPanel refresh={refresh} />
         </div>
-        <button className={styles.openButton} onClick={battleVisibleAction}>
-          인게임 오픈
-        </button>
+        <div className={styles.buttonWrapper}>
+          <button className={styles.openButton} onClick={battleVisibleAction}>
+            인게임 오픈
+          </button>
+          <Link
+            className={styles.linkText}
+            href={"https://forms.gle/a7YLdC5V45h73DMY7"}
+            target="_blank"
+          >
+            후기/의견 보내기
+          </Link>
+        </div>
         {battleVisible && <BattlePanel onClose={battleVisibleAction} />}
       </main>
     </div>

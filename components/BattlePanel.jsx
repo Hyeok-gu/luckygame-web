@@ -18,7 +18,7 @@ const HERO_TIGER_POWER = 0.0; //호랑이사부 공격력 증가 퍼센트
 const HERO_DRAGON_POWER = 0.0; //드래곤 공격력 증가 퍼센트
 const HERO_BATMAN_POWER = 0.0; //배트맨 공격력 증가 퍼센트
 const HERO_ROKA_POWER = 0.0; //로카 공격력 증가 퍼센트
-const PET_CUSTOM_POWER = 0.221; //펫 개별 능력치 공격력 증가 퍼센트
+const PET_CUSTOM_POWER = 0; //펫 개별 능력치 공격력 증가 퍼센트
 // const PET_CUSTOM_POWER = 0; //펫 개별 능력치 공격력 증가 퍼센트
 
 export default function BattlePanel(props) {

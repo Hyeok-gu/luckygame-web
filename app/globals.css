@@ -1,42 +1,94 @@
+/* setting */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* color */
+  --default-white: #ffffff;
+  --default-gray: #a7b2c7;
+  --default-border: #293a63;
+  --default-background: #0f1933;
+  --point-blue: #5558ff;
+  --point-green: #55ffdd;
+  --background-green: #55ffdd3d;
+
+  /* Font size */
+  --font-large: 36rem;
+  --font-medium: 20rem;
+  --font-regular: 18rem;
+  --font-small: 16rem;
+  --font-micro: 14rem;
+  --font-maxMicro: 12rem;
+
+  /* lineHeight */
+  --lineHeight-large: 36px;
+  --lineHeight-medium: 20px;
+  --lineHeight-regular: 18px;
+  --lineHeight-small: 16px;
+  --lineHeight-micro: 14px;
+  --lineHeight-maxMicro: 12px;
+
+  /* Font weight */
+  --weight-extraBold: 900;
+  --weight-bold: 700;
+  --weight-medium: 500;
+  --weight-regular: 300;
+  --weight-light: 200;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  /* height: 100%; */
+  font-size: 6.25%; /* 16px * 6.25% = 1px → 1rem = 1px */
+  color: var(--default-black);
+  -ms-overflow-style: none; /* IE와 Edge에서 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-size: 16rem;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+ul,
+li {
+  list-style-type: none;
 }

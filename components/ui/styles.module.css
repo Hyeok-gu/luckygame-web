@@ -1,0 +1,179 @@
+/* 섹션 타이틀 스타일 */
+.sectionTitleWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sectionTitleWrapper .title {
+  font-size: var(--font-regular);
+  line-height: var(--lineHeight-regular);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+}
+
+.sectionTitleWrapper .description {
+  font-size: var(--font-small);
+  line-height: var(--lineHeight-small);
+  font-weight: var(--weight-regular);
+  color: var(--default-gray);
+}
+
+/* 서포트 아이템 스타일 */
+.supportItem {
+  width: 100%;
+  border: 1px solid var(--default-border);
+  padding: 7px 14px 14px 7px;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--default-background);
+  border-radius: 14px;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.supportItem.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.supportItem .icon {
+  width: 48px;
+  height: 48px;
+}
+
+.supportItem .infoArea {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  flex: 1;
+}
+
+.supportItem .titleWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.supportItem .title {
+  font-size: var(--font-regular);
+  line-height: var(--lineHeight-regular);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+  flex-shrink: 0;
+}
+
+.supportItem .statsBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.supportItem .level {
+  font-size: var(--font-maxMicro);
+  font-weight: var(--weight-regular);
+  color: var(--default-gray);
+  display: flex;
+  align-items: center;
+}
+
+.supportItem .level span {
+  margin-left: 4px;
+  font-size: var(--font-medium);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+}
+
+.supportItem .level select {
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  font-size: var(--font-medium);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+  appearance: none; /* 기본 화살표 제거 (공통) */
+  -webkit-appearance: none; /* Safari, Chrome */
+  -moz-appearance: none; /* Firefox */
+  background-image: none; /* 배경 화살표 제거 */
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.supportItem button {
+  width: 32px;
+  height: 32px;
+}
+.supportItem button svg {
+  transition: all 0.2s;
+}
+
+.supportItem .isOpen svg {
+  transform: rotate(180deg);
+}
+
+.supportItem .supportDetail {
+  margin-top: 12px;
+  font-size: var(--font-maxMicro);
+  font-weight: var(--weight-medium);
+  color: var(--default-gray);
+  display: flex;
+  flex-direction: column;
+}
+.supportItem .supportDetail p {
+  width: 100%;
+  flex: 1;
+}
+
+/* 신화 스킬 UI */
+
+.skillTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.skillBtn {
+  width: 83px;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--default-border);
+  background-color: var(--default-background);
+  border-radius: 14px;
+  color: #9ca3af;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.skillDesc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.skillDesc p {
+  max-width: 257px;
+  text-align: center;
+  width: 100%;
+  font-size: var(--font-micro);
+  line-height: 18px;
+  font-weight: var(--weight-medium);
+  color: var(--default-gray);
+  margin: 24px 0;
+}
+
+.active {
+  border: 1px solid var(--point-blue);
+  background: rgba(85, 88, 255, 0.1);
+  color: #fff;
+}
+
+@media (max-width: 650px) {
+  .sectionTitleWrapper {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}

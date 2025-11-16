@@ -1,0 +1,115 @@
+.panel {
+  width: 100%;
+  max-width: 530px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.tresureArea {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.artifactArea .inner {
+  padding: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.petLevelArea .inner {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.petLevelArea .inner .levelBox {
+  border: 1px solid var(--default-border);
+  border-radius: 14px;
+  padding: 20px;
+  background-color: var(--default-background);
+}
+
+.petLevelArea .inner .levelBox .titleWrapper {
+  font-size: var(--font-regular);
+  line-height: var(--lineHeight-regular);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.levelBox .level {
+  font-size: var(--font-maxMicro);
+  font-weight: var(--weight-regular);
+  color: var(--default-gray);
+  display: flex;
+  align-items: center;
+}
+
+.levelBox .level span {
+  margin-left: 4px;
+  font-size: var(--font-medium);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+}
+
+.levelBox .level select {
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  font-size: var(--font-medium);
+  font-weight: var(--weight-bold);
+  color: var(--default-white);
+  appearance: none; /* 기본 화살표 제거 (공통) */
+  -webkit-appearance: none; /* Safari, Chrome */
+  -moz-appearance: none; /* Firefox */
+  background-image: none; /* 배경 화살표 제거 */
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.levelEffectDetail {
+  margin-top: 12px;
+  font-size: var(--font-maxMicro);
+  font-weight: var(--weight-medium);
+  color: var(--default-gray);
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyBox {
+  border: 1px dashed var(--default-border);
+  border-radius: 14px;
+  padding: 14px;
+  background-color: var(--default-background);
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--default-gray);
+  font-size: var(--font-micro);
+}
+.emptyBox p {
+  width: 100%;
+  text-align: center;
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.effectDisabled {
+  cursor: pointer;
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+@media (max-width: 768px) {
+  .artifactArea .inner {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

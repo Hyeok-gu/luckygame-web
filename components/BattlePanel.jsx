@@ -389,7 +389,6 @@ export default function BattlePanel(props) {
               (1 + artifactStats.artifactSpeed * 2 + otherSpeed / 100)
             }
             heroData={heroData}
-            tresureStats={tresureStats}
             artifactStats={artifactStats}
             petStats={petStats}
             manaRecovery={!manaRecovery ? 0 : Number(manaRecovery / 100)}

@@ -7,7 +7,6 @@ export default function AwackHailyTestPanel({
   heroData,
   finalPower,
   finalSpeed,
-  tresureStats,
   artifactStats,
   petStats,
   manaRecovery = 0,
@@ -33,7 +32,6 @@ export default function AwackHailyTestPanel({
   const petTotalDamage =
     heroData.type === "magic" ? petMagicDamage : petPhysicalDamage;
 
-  const tresureCriticalDamage = tresureStats.tresureCriticalDamage; //신화 보물에 붙은 치명타 피해 퍼센트, 기본 피해량의 곱 합연산 ex.0.2
   const artifactCriticalDamage =
     heroData.type === "magic" ? artifactStats.artifactCriticalDamage : 0; //마법피해만 해당되는 유물 매직건틀렛 치명타 피해 퍼센트
   const artifactCriticalChance = artifactStats.artifactCriticalPercent; //밤바인형 치명타 확률 증가 ex.0.032
@@ -45,8 +43,7 @@ export default function AwackHailyTestPanel({
   const dur = 120; // 테스트 시간(초)
 
   const critChance = 0.05 + artifactCriticalChance + petCriticalPercent; // 치명타 확률 (기본 5% 가정, + 유물 밤바 + 펫 종합 효과)
-  const critDamage =
-    2.5 + artifactCriticalDamage + petCriticalDamage + tresureCriticalDamage; // 치명타 피해 배수 (기본 250% + (마법피해만)유물 치명타 피해 + 펫 종합 효과)
+  const critDamage = 2.5 + artifactCriticalDamage + petCriticalDamage; // 치명타 피해 배수 (기본 250% + (마법피해만)유물 치명타 피해 + 펫 종합 효과)
 
   const defaultDamage =
     finalPower *

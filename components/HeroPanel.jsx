@@ -153,7 +153,7 @@ export default function HeroPanel({ refreshAction }) {
                   {heroListVisible && (
                     <ul className={styles.heroList}>
                       {heroList.map((item, index) => {
-                        const isActive = item.value === selectedHero.enName;
+                        const isActive = item.enName === selectedHero.enName;
                         return (
                           <li
                             className={isActive ? styles.selected : ""}

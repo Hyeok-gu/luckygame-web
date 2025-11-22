@@ -12,12 +12,10 @@ export default function ReaperDianTestPanel(props) {
     heroData,
     finalPower,
     finalSpeed,
-    tresureStats,
     artifactStats,
     petStats,
     manaRecovery = 0,
     isBoss,
-    sameTarget,
   } = props;
 
   //유물 효과

@@ -141,6 +141,9 @@ export default function Note(props) {
               💡각성 헤일리의 궁극기 마나회복 시간은 90초로 측정했습니다.
             </span>
             <span className={styles.ex}>
+              💡사신 다이안의 궁극기 마나회복 시간은 60초로 측정했습니다.
+            </span>
+            <span className={styles.ex}>
               💡만약 신화의 쿨타임 및 마나회복 시간이 잘못 측정되었다면 구글폼을
               통해 내용과 자료 함께 전달해 주시면 큰 도움이 됩니다 감사합니다.
             </span>
@@ -198,6 +201,13 @@ export default function Note(props) {
             <span className={styles.ex}>
               (2.5 + 유물 치명타 피해(마법피해만) + 펫 종합 효과 + 펫 개별
               효과(후순위 개발 중))
+            </span>
+          </li>
+          <li className={styles.item}>
+            - 전투측정표 내 1회 피해량은 공격 시 발생하는 피해량입니다.
+            <span className={styles.ex}>
+              만약 치명타가 발생한 경우, 피해량이 변동되었다가 다음 공격의
+              피해량으로 변경됩니다.
             </span>
           </li>
         </ul>

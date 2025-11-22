@@ -24,6 +24,41 @@ export default function Home() {
     setRefresh(!refresh);
   };
 
+  // const saveInfo = () => {
+  //   const loadedHeroInfoString = localStorage.getItem("heroData") || null;
+  //   const loadedPetStatsString = localStorage.getItem("petStats") || null;
+  //   const loadedArtifactStatsString =
+  //     localStorage.getItem("artifactStats") || null;
+  //   const loadedTresureStatsString =
+  //     localStorage.getItem("tresureStats") || null;
+
+  //   const loadedHeroInfo = loadedHeroInfoString
+  //     ? JSON.parse(loadedHeroInfoString)
+  //     : null;
+  //   const loadedPetStats = loadedPetStatsString
+  //     ? JSON.parse(loadedPetStatsString)
+  //     : null;
+  //   const loadedArtifactStats = loadedArtifactStatsString
+  //     ? JSON.parse(loadedArtifactStatsString)
+  //     : null;
+  //   const loadedTresureStats = loadedTresureStatsString
+  //     ? JSON.parse(loadedTresureStatsString)
+  //     : null;
+
+  //   localStorage.setItem("savedHeroData", JSON.stringify(loadedHeroInfo));
+  //   localStorage.setItem("savedPetStats", JSON.stringify(loadedPetStats));
+  //   localStorage.setItem(
+  //     "savedArtifactStats",
+  //     JSON.stringify(loadedArtifactStats)
+  //   );
+  //   localStorage.setItem(
+  //     "savedTresureStats",
+  //     JSON.stringify(loadedTresureStats)
+  //   );
+
+  //   alert("저장했습니다.");
+  // };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -36,6 +71,9 @@ export default function Home() {
           <button className={styles.openButton} onClick={battleVisibleAction}>
             인게임 오픈
           </button>
+          {/* <button className={styles.linkText} onClick={saveInfo}>
+            영웅 및 유물 정보 저장
+          </button> */}
           <Link
             className={styles.linkText}
             href={"https://forms.gle/a7YLdC5V45h73DMY7"}

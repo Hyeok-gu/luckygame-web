@@ -10,7 +10,8 @@ import { tresureItems } from "@/util/tresureItems";
 import { heroList } from "@/util/heroStat";
 
 export default function RelicPanel({ refresh }) {
-  const [selectedHero, setSelectedHero] = useState(heroList[0].value);
+  const [loading, setLoading] = useState(true);
+  const [selectedHero, setSelectedHero] = useState(heroList[0].enName);
   const [selectedHeroData, setSelectedHeroData] = useState({});
   const [isTresure, setIsTresure] = useState(true); //신화 보물 유무
   const [selectedTresureInfo, setSelectedTresureInfo] = useState({}); //선택한 레벨의 신화 보물정보
@@ -59,13 +60,65 @@ export default function RelicPanel({ refresh }) {
     petSlot: 0, // 펫 슬롯 개수
   });
 
+  useEffect(() => {
+    const heroIndex = localStorage.getItem("herosTotalLevel") / 10;
+    console.log(heroIndex);
+    setPetTotalLevel(localStorage.getItem("petTotalLevel") || 0);
+    setHerosTotalLevel(localStorage.getItem("herosTotalLevel") || 0);
+    setHerosStat(heroIndex * 0.5);
+  }, []);
+  //저장되어 있는 유물 레벨 정보 가져오기
+  useEffect(() => {
+    setLoading(true);
+    try {
+      const lodedArtifactsLevelString = localStorage.getItem(
+        "savedArtifactsLevel"
+      );
+      const lodedTresureLevel = localStorage.getItem("tresureLevel");
+
+      const lodedArtifactsLevel = lodedArtifactsLevelString
+        ? JSON.parse(lodedArtifactsLevelString)
+        : null;
+
+      if (!lodedArtifactsLevel) {
+        console.log("조회된 유물 레벨이 없습니다.");
+        return;
+      } else {
+        setPowerPotionLevel(lodedArtifactsLevel.powerPotionLevel);
+        setFairyBowLevel(lodedArtifactsLevel.fairyBowLevel);
+        setSwordLevel(lodedArtifactsLevel.swordLevel);
+        setSecretBookLevel(lodedArtifactsLevel.secretBookLevel);
+        setBatLevel(lodedArtifactsLevel.batLevel);
+        setWizardHatLevel(lodedArtifactsLevel.wizardHatLevel);
+        setOldBookLevel(lodedArtifactsLevel.oldBookLevel);
+        setMagicGauntletLevel(lodedArtifactsLevel.magicGauntletLevel);
+        setBambaLevel(lodedArtifactsLevel.bambaLevel);
+        setmoneyGunLevel(lodedArtifactsLevel.moneyGunLevel);
+        setYogurtLevel(lodedArtifactsLevel.yogurtLevel);
+        setTresureLevel(Number(lodedTresureLevel));
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const data = tresureItems[selectedHero];
+    const effect = data?.effect?.[tresureLevel];
+    setTresureStats(effect);
+  }, [tresureLevel]);
+
   //로컬스토리지에 저장된 신화 정보 가져오기
   useEffect(() => {
-    const loadedHeroInfoString = localStorage.getItem("heroData");
+    const loadedHeroInfoString =
+      localStorage.getItem("savedHeroData") || localStorage.getItem("heroData");
+
     const loadedHeroInfo = loadedHeroInfoString
       ? JSON.parse(loadedHeroInfoString)
       : null;
-    setSelectedHero(loadedHeroInfo?.enName || heroList[0].value);
+
+    setSelectedHero(loadedHeroInfo?.enName || heroList[0].enName);
     setSelectedHeroData(loadedHeroInfo || null);
   }, [refresh]);
 
@@ -75,7 +128,56 @@ export default function RelicPanel({ refresh }) {
     localStorage.setItem("heroStats", JSON.stringify(herosStat));
     localStorage.setItem("artifactStats", JSON.stringify(artifactStats));
     localStorage.setItem("tresureStats", JSON.stringify(tresureStats));
-  }, [petStats, artifactStats, tresureStats, tresureLevel, herosStat]);
+  }, [
+    petStats,
+    artifactStats,
+    tresureStats,
+    tresureLevel,
+    herosStat,
+    tresureLevel,
+  ]);
+
+  useEffect(() => {
+    localStorage.setItem("tresureLevel", JSON.stringify(tresureLevel));
+  }, [tresureLevel]);
+
+  //펫 및 영웅 종합레벨 저장
+  useEffect(() => {
+    localStorage.setItem("petTotalLevel", petTotalLevel);
+    localStorage.setItem("herosTotalLevel", herosTotalLevel);
+  }, [petTotalLevel, herosTotalLevel]);
+
+  //유물 레벨 저장
+  useEffect(() => {
+    localStorage.setItem(
+      "savedArtifactsLevel",
+      JSON.stringify({
+        powerPotionLevel,
+        fairyBowLevel,
+        swordLevel,
+        secretBookLevel,
+        batLevel,
+        wizardHatLevel,
+        oldBookLevel,
+        magicGauntletLevel,
+        bambaLevel,
+        moneyGunLevel,
+        yogurtLevel,
+      })
+    );
+  }, [
+    powerPotionLevel,
+    fairyBowLevel,
+    swordLevel,
+    secretBookLevel,
+    batLevel,
+    wizardHatLevel,
+    oldBookLevel,
+    magicGauntletLevel,
+    bambaLevel,
+    moneyGunLevel,
+    yogurtLevel,
+  ]);
 
   //유물 효과 관리 액션
   useEffect(() => {
@@ -88,7 +190,7 @@ export default function RelicPanel({ refresh }) {
       artifactPhysicalDamage: artifactItems.bat.effect[batLevel] / 100,
       artifactMagicDamage: artifactItems.wizardHat.effect[wizardHatLevel] / 100,
       artifactSkillChance: artifactItems.oldBook.effect[oldBookLevel] / 100,
-      artifactCriticalPercent: artifactItems.bamba.effect[bambaLevel],
+      artifactCriticalPercent: artifactItems.bamba.effect[bambaLevel] / 100,
       artifactCriticalDamage:
         artifactItems.magicGauntlet.effect[magicGauntletLevel] / 100,
       artifactManaCallback: artifactItems.yogurt.effect[yogurtLevel] / 100, // 코인 기반은 그대로
@@ -263,173 +365,177 @@ export default function RelicPanel({ refresh }) {
           title="유물 설정"
           description="현재 보유한 유물의 레벨을 설정하세요"
         />
-        <div className={styles.inner}>
-          <SupportItem
-            value={powerPotionLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setPowerPotionLevel);
-            }}
-            item={{
-              name: artifactItems.powerPotion.name,
-              title: artifactItems.powerPotion.title,
-              desc:
-                artifactItems.powerPotion.desc +
-                artifactItems.powerPotion.effect[powerPotionLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={fairyBowLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setFairyBowLevel);
-            }}
-            item={{
-              name: artifactItems.fairyBow.name,
-              title: artifactItems.fairyBow.title,
-              desc:
-                artifactItems.fairyBow.desc +
-                artifactItems.fairyBow.effect[fairyBowLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={swordLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setSwordLevel);
-            }}
-            item={{
-              name: artifactItems.sword.name,
-              title: artifactItems.sword.title,
-              desc:
-                artifactItems.sword.desc +
-                artifactItems.sword.effect[swordLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={secretBookLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setSecretBookLevel);
-            }}
-            item={{
-              name: artifactItems.secretBook.name,
-              title: artifactItems.secretBook.title,
-              desc:
-                artifactItems.secretBook.desc +
-                artifactItems.secretBook.effect[secretBookLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={batLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setBatLevel);
-            }}
-            item={{
-              name: artifactItems.bat.name,
-              title: artifactItems.bat.title,
-              desc:
-                artifactItems.bat.desc +
-                artifactItems.bat.effect[batLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={wizardHatLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setWizardHatLevel);
-            }}
-            item={{
-              name: artifactItems.wizardHat.name,
-              title: artifactItems.wizardHat.title,
-              desc:
-                artifactItems.wizardHat.desc +
-                artifactItems.wizardHat.effect[wizardHatLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={oldBookLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setOldBookLevel);
-            }}
-            item={{
-              name: artifactItems.oldBook.name,
-              title: artifactItems.oldBook.title,
-              desc:
-                artifactItems.oldBook.desc +
-                artifactItems.oldBook.effect[oldBookLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={bambaLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setBambaLevel);
-            }}
-            item={{
-              name: artifactItems.bamba.name,
-              title: artifactItems.bamba.title,
-              desc:
-                artifactItems.bamba.desc +
-                artifactItems.bamba.effect[bambaLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={magicGauntletLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setMagicGauntletLevel);
-            }}
-            item={{
-              name: artifactItems.magicGauntlet.name,
-              title: artifactItems.magicGauntlet.title,
-              desc:
-                artifactItems.magicGauntlet.desc +
-                artifactItems.magicGauntlet.effect[magicGauntletLevel] +
-                "% 증가",
-            }}
-          />
-          <SupportItem
-            value={yogurtLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setYogurtLevel);
-            }}
-            item={{
-              name: artifactItems.yogurt.name,
-              title: artifactItems.yogurt.title,
-              desc:
-                artifactItems.yogurt.desc +
-                artifactItems.yogurt.effect[yogurtLevel] +
-                "% 반환",
-            }}
-          />
-          <SupportItem
-            value={moneyGunLevel}
-            maxLevel={11}
-            setValue={(e) => {
-              artifactLevelChange(e, setmoneyGunLevel);
-            }}
-            item={{
-              name: artifactItems.moneyGun.name,
-              title: artifactItems.moneyGun.title,
-              desc:
-                artifactItems.moneyGun.desc +
-                artifactItems.moneyGun.effect[moneyGunLevel] +
-                "% 증가",
-            }}
-          />
-        </div>
+        {!loading ? (
+          <div className={styles.inner}>
+            <SupportItem
+              value={powerPotionLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setPowerPotionLevel);
+              }}
+              item={{
+                name: artifactItems.powerPotion.name,
+                title: artifactItems.powerPotion.title,
+                desc:
+                  artifactItems.powerPotion.desc +
+                  artifactItems.powerPotion.effect[powerPotionLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={fairyBowLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setFairyBowLevel);
+              }}
+              item={{
+                name: artifactItems.fairyBow.name,
+                title: artifactItems.fairyBow.title,
+                desc:
+                  artifactItems.fairyBow.desc +
+                  artifactItems.fairyBow.effect[fairyBowLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={swordLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setSwordLevel);
+              }}
+              item={{
+                name: artifactItems.sword.name,
+                title: artifactItems.sword.title,
+                desc:
+                  artifactItems.sword.desc +
+                  artifactItems.sword.effect[swordLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={secretBookLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setSecretBookLevel);
+              }}
+              item={{
+                name: artifactItems.secretBook.name,
+                title: artifactItems.secretBook.title,
+                desc:
+                  artifactItems.secretBook.desc +
+                  artifactItems.secretBook.effect[secretBookLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={batLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setBatLevel);
+              }}
+              item={{
+                name: artifactItems.bat.name,
+                title: artifactItems.bat.title,
+                desc:
+                  artifactItems.bat.desc +
+                  artifactItems.bat.effect[batLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={wizardHatLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setWizardHatLevel);
+              }}
+              item={{
+                name: artifactItems.wizardHat.name,
+                title: artifactItems.wizardHat.title,
+                desc:
+                  artifactItems.wizardHat.desc +
+                  artifactItems.wizardHat.effect[wizardHatLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={oldBookLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setOldBookLevel);
+              }}
+              item={{
+                name: artifactItems.oldBook.name,
+                title: artifactItems.oldBook.title,
+                desc:
+                  artifactItems.oldBook.desc +
+                  artifactItems.oldBook.effect[oldBookLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={bambaLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setBambaLevel);
+              }}
+              item={{
+                name: artifactItems.bamba.name,
+                title: artifactItems.bamba.title,
+                desc:
+                  artifactItems.bamba.desc +
+                  artifactItems.bamba.effect[bambaLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={magicGauntletLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setMagicGauntletLevel);
+              }}
+              item={{
+                name: artifactItems.magicGauntlet.name,
+                title: artifactItems.magicGauntlet.title,
+                desc:
+                  artifactItems.magicGauntlet.desc +
+                  artifactItems.magicGauntlet.effect[magicGauntletLevel] +
+                  "% 증가",
+              }}
+            />
+            <SupportItem
+              value={yogurtLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setYogurtLevel);
+              }}
+              item={{
+                name: artifactItems.yogurt.name,
+                title: artifactItems.yogurt.title,
+                desc:
+                  artifactItems.yogurt.desc +
+                  artifactItems.yogurt.effect[yogurtLevel] +
+                  "% 반환",
+              }}
+            />
+            <SupportItem
+              value={moneyGunLevel}
+              maxLevel={11}
+              setValue={(e) => {
+                artifactLevelChange(e, setmoneyGunLevel);
+              }}
+              item={{
+                name: artifactItems.moneyGun.name,
+                title: artifactItems.moneyGun.title,
+                desc:
+                  artifactItems.moneyGun.desc +
+                  artifactItems.moneyGun.effect[moneyGunLevel] +
+                  "% 증가",
+              }}
+            />
+          </div>
+        ) : (
+          <div className={styles.emptyBox}>유물 정보를 불러옵니다.</div>
+        )}
       </div>
       <div className={styles.petLevelArea}>
         <SectionTitle

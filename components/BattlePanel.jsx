@@ -7,10 +7,12 @@ import HailyTestPanel from "./HailyTestPanel";
 import Note from "./Note";
 import haily from "@/public/images/hero/haily.webp";
 import awackHaily from "@/public/images/hero/awackHaily.webp";
+import reaperDian from "@/public/images/hero/reaperDian.webp";
 import Image from "next/image";
 import AwackHailyTestPanel from "./AwackHailyTestPanel";
+import ReaperDianTestPanel from "./ReaperDianTestPanel";
 
-const heroProfile = { haily, awackHaily };
+const heroProfile = { haily, awackHaily, reaperDian };
 
 const HERO_BLOP_POWER = 0; //정수
 const HERO_BEIN_FINAL_POWER = 0.0; //베인 최후 스킬 퍼센트
@@ -18,7 +20,7 @@ const HERO_TIGER_POWER = 0.0; //호랑이사부 공격력 증가 퍼센트
 const HERO_DRAGON_POWER = 0.0; //드래곤 공격력 증가 퍼센트
 const HERO_BATMAN_POWER = 0.0; //배트맨 공격력 증가 퍼센트
 const HERO_ROKA_POWER = 0.0; //로카 공격력 증가 퍼센트
-const PET_CUSTOM_POWER = 0; //펫 개별 능력치 공격력 증가 퍼센트
+const PET_CUSTOM_POWER = 0.0; //펫 개별 능력치 공격력 증가 퍼센트
 // const PET_CUSTOM_POWER = 0; //펫 개별 능력치 공격력 증가 퍼센트
 
 export default function BattlePanel(props) {
@@ -101,6 +103,7 @@ export default function BattlePanel(props) {
       heroData.enName === "haily" ? (heroData.heroLevel >= 6 ? 40 : 20) : 0;
     //헤일리 초신성 상태일 때의 별의 힘 증가량 50% 증가, 별의 힘 없는 상태에서도 50% 증가됨
     const awackHailyPower = heroData.enName === "awackHaily" ? 20 : 0; //각성 헤일리 기본 2000% 공격력 증가.
+    const reaperDianPower = heroData.enName === "reaperDian" ? 0 : 0; //사신다이안 기본 2000% 공격력 증가.
 
     const hailyFinarPower = isUltimate ? hailyPower * 1.5 : hailyPower;
     const result =
@@ -113,10 +116,13 @@ export default function BattlePanel(props) {
         HERO_BATMAN_POWER +
         HERO_ROKA_POWER +
         hailyFinarPower +
-        awackHailyPower);
+        awackHailyPower +
+        reaperDianPower);
 
     setFinalPower(Math.round(result - heroData.defaultPower));
   };
+
+  console.log(heroData);
 
   return (
     <>
@@ -169,12 +175,14 @@ export default function BattlePanel(props) {
           <div className={styles.inner}>
             <div className={styles.profileArea}>
               <div className={styles.profileImage}>
-                <Image
-                  className={styles.profileImageSrc}
-                  src={heroProfile[heroData.enName]}
-                  alt="신화영웅 이미지"
-                  fill
-                />
+                {heroProfile[heroData.enName] && (
+                  <Image
+                    className={styles.profileImageSrc}
+                    src={heroProfile[heroData.enName]}
+                    alt="신화영웅 이미지"
+                    fill
+                  />
+                )}
                 <p className={styles.profileLevel}>Lv.{heroData.heroLevel}</p>
                 <p className={styles.profileName}>{heroData.name}</p>
               </div>
@@ -302,18 +310,20 @@ export default function BattlePanel(props) {
                   }}
                 />
               </div>
-              <div className={styles.statsBox}>
-                <span className={styles.indexTitle}>다른 종류 신화 수</span>
-                <input
-                  className={`${styles.value} ${styles.input}`}
-                  type="number"
-                  placeholder="신화 종류 입력"
-                  value={otherHeroLength}
-                  onChange={(e) => {
-                    setOtherHeroLength(e.target.value);
-                  }}
-                />
-              </div>
+              {heroData.enName === "awackHaily" && (
+                <div className={styles.statsBox}>
+                  <span className={styles.indexTitle}>다른 종류 신화 수</span>
+                  <input
+                    className={`${styles.value} ${styles.input}`}
+                    type="number"
+                    placeholder="신화 종류 입력"
+                    value={otherHeroLength}
+                    onChange={(e) => {
+                      setOtherHeroLength(e.target.value);
+                    }}
+                  />
+                </div>
+              )}
             </div>
             <div className={styles.optionsWrapper}>
               <button
@@ -323,15 +333,17 @@ export default function BattlePanel(props) {
               >
                 보스공격 {isBoss ? "ON" : "OFF"}
               </button>
-              <button
-                className={`${styles.optionButton} ${
-                  sameTarget ? styles.on : ""
-                }`}
-                onClick={() => setSameTarget(!sameTarget)}
-                title="같은 대상을 공격할지 선택합니다."
-              >
-                같은 대상 공격 {sameTarget ? "ON" : "OFF"}
-              </button>
+              {heroData.enName === "awackHaily" && (
+                <button
+                  className={`${styles.optionButton} ${
+                    sameTarget ? styles.on : ""
+                  }`}
+                  onClick={() => setSameTarget(!sameTarget)}
+                  title="같은 대상을 공격할지 선택합니다."
+                >
+                  같은 대상 공격 {sameTarget ? "ON" : "OFF"}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -367,6 +379,22 @@ export default function BattlePanel(props) {
             isBoss={isBoss}
             sameTarget={sameTarget}
             otherHeroLength={otherHeroLength * 0.05}
+          />
+        )}
+        {heroData.enName === "reaperDian" && (
+          <ReaperDianTestPanel
+            finalPower={finalPower + heroData.defaultPower}
+            finalSpeed={
+              heroData.defaultSpeed *
+              (1 + artifactStats.artifactSpeed * 2 + otherSpeed / 100)
+            }
+            heroData={heroData}
+            tresureStats={tresureStats}
+            artifactStats={artifactStats}
+            petStats={petStats}
+            manaRecovery={!manaRecovery ? 0 : Number(manaRecovery / 100)}
+            isBoss={isBoss}
+            sameTarget={sameTarget}
           />
         )}
       </section>

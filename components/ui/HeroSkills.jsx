@@ -28,6 +28,13 @@ export default function HeroSkills({ hero = "haily", heroLevel }) {
       {/* 선택된 스킬 설명 */}
       <div className={styles.skillDesc}>
         <p>
+          {hero === "reaperDian" &&
+          selectedSkill === "relayThunder" &&
+          heroLevel >= 6
+            ? "8%(+5%)"
+            : hero === "awackHaily" && selectedSkill === "sunSeed"
+            ? "8%"
+            : ""}
           {hero === "awackHaily" &&
           selectedSkill === "sunSeed" &&
           heroLevel >= 12

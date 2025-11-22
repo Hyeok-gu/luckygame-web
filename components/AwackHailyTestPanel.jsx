@@ -36,13 +36,14 @@ export default function AwackHailyTestPanel({
   const tresureCriticalDamage = tresureStats.tresureCriticalDamage; //신화 보물에 붙은 치명타 피해 퍼센트, 기본 피해량의 곱 합연산 ex.0.2
   const artifactCriticalDamage =
     heroData.type === "magic" ? artifactStats.artifactCriticalDamage : 0; //마법피해만 해당되는 유물 매직건틀렛 치명타 피해 퍼센트
-  const artifactCriticalChance = artifactStats.artifactCriticalPercent / 100; //밤바인형 치명타 확률 증가 ex.0.032
+  const artifactCriticalChance = artifactStats.artifactCriticalPercent; //밤바인형 치명타 확률 증가 ex.0.032
   const artifactSkillChance = artifactStats.artifactSkillChance || 0; //스킬 발동 확률
   const artifactBossDamage = isBoss ? artifactStats.artifactBossDamage : 0; //보스에게 가하는 피해
   const artifactManaCallback = artifactStats.artifactManaCallback || 0; //궁극기 사용 시 마나 콜백
 
   const aps = finalSpeed ? finalSpeed : 1; // 최종 초당 공격 횟수
   const dur = 120; // 테스트 시간(초)
+
   const critChance = 0.05 + artifactCriticalChance + petCriticalPercent; // 치명타 확률 (기본 5% 가정, + 유물 밤바 + 펫 종합 효과)
   const critDamage =
     2.5 + artifactCriticalDamage + petCriticalDamage + tresureCriticalDamage; // 치명타 피해 배수 (기본 250% + (마법피해만)유물 치명타 피해 + 펫 종합 효과)
@@ -88,6 +89,10 @@ export default function AwackHailyTestPanel({
   const [oneSunLayDamage, setOneSunLayDamage] = useState(0); //1회 태양 광선 데미지
   const [oneSunSeedDamage, setOneSunSeedDamage] = useState(0); //1회 태초의 폭발 데미지
   const [oneFlareDamage, setOneFlareDamage] = useState(0); //1회 플레어 데미지
+  const [defaultCritTotal, setDefaultCritTotal] = useState(0); //기본 공격 치명타 발생 누적
+  const [sunLayCritTotal, setSunLayCritTotal] = useState(0); //태양 광선 치명타 발생 누적
+  const [sunSeedCritTotal, setSunSeedCritTotal] = useState(0); //태초의 폭발 치명타 발생 누적
+  const [flareCritTotal, setFlareCritTotal] = useState(0); //플레어 치명타 발생 누적
   const [attackCount, setAttackCount] = useState(0);
   const [pendingSeeds, setPendingSeeds] = useState([]);
   const [flareActive, setFlareActive] = useState(false);
@@ -135,6 +140,10 @@ export default function AwackHailyTestPanel({
     let oneSunLayDamage = 0; //1회당 태양광선 피해량
     let oneSunSeedDamage = 0; //1회당 태초의 폭발 피해량
     let oneFlareDamage = 0; //1회당 플레어 피해량
+    let critDefaultUsed = 0; //기본공격 치명타 발생 수
+    let critSunLayUsed = 0; //태양광선 치명타 발생 수
+    let critSunSeedUsed = 0; //태초의 폭발 치명타 발생 수
+    let critFlareUsed = 0; //플레어 치명타 발생 수
     let seeds = [];
     let manaValue = 0;
     let flareInterval;
@@ -160,12 +169,12 @@ export default function AwackHailyTestPanel({
             flareRef.current = true;
             flareUsed += 1;
             setMana(100);
-            flareTimeout = setTimeout(() => {
-              setFlareActive(false);
-              setUltimateActive(false);
-              flareRef.current = false;
-              manaValue = 0;
-            }, flare.duration * 1000);
+            // flareTimeout = setTimeout(() => {
+            //   setFlareActive(false);
+            //   setUltimateActive(false);
+            //   flareRef.current = false;
+            //   manaValue = 0;
+            // }, flare.duration * 1000);
           }
           setMana(manaValue);
         }
@@ -184,7 +193,7 @@ export default function AwackHailyTestPanel({
 
     // 플레어 상태 시작 시 0.4초마다 공격
     const startFlareAttack = () => {
-      let flareAttackCounter = 1;
+      let flareAttackCounter = 0;
       flareIntervalId = setInterval(() => {
         if (!flareRef.current) return; // 플레어 끝나면 공격 중지
         flareAttackCounter++;
@@ -198,18 +207,25 @@ export default function AwackHailyTestPanel({
 
         if (Math.random() < critChance) {
           damage *= critDamage;
+          critFlareUsed += 1;
         }
 
         flareTotal += damage;
         total += damage;
-        // 상태 업데이트
-        // setTotalDamage((prev) => prev + damage);
+
         // 10초 제한
         setFlareDamageTotal(flareTotal);
         setOneFlareDamage(damage);
+        setFlareCritTotal(critFlareUsed);
+
         if (flareAttackCounter >= flare.duration / 0.4) {
           // 25회
-
+          setFlareActive(false);
+          setUltimateActive(false);
+          flareRef.current = false;
+          manaValue = 0;
+          setMana(0);
+          flareAttackCounter = 0;
           return;
         }
       }, 400); // 0.4초
@@ -240,15 +256,6 @@ export default function AwackHailyTestPanel({
 
       // 💥 치명타 확률 계산
       if (!isUltimate) {
-        if (Math.random() < critChance) {
-          isCrit = true;
-          damage *= 1 + petDefaultDamage;
-          damage *= critDamage;
-          defaultTotal += damage;
-          defaultUsed += 1;
-          // console.log(`치명타 발생! 💥 ${damage.toFixed(0)} 피해`);
-        }
-
         // 🌟 태양 광선 (즉시 피해)
         if (Math.random() < sunLay.percent) {
           isSkill = true;
@@ -261,6 +268,7 @@ export default function AwackHailyTestPanel({
 
           if (Math.random() < critChance) {
             const criticalDamage = skillDamage * critDamage;
+            critSunLayUsed += 1;
             total += criticalDamage;
             sunLayTotal += criticalDamage;
             // console.log(
@@ -289,6 +297,7 @@ export default function AwackHailyTestPanel({
             seeds.push(Date.now());
             setTimeout(() => {
               if (Math.random() < critChance) {
+                critSunSeedUsed += 1;
                 const criticalDamage = skillDamage * critDamage;
                 total += criticalDamage;
                 sunSeedTotal += criticalDamage;
@@ -303,10 +312,10 @@ export default function AwackHailyTestPanel({
             // 같은 대상이면 3번 누적 시 바로 폭발
             seeds.push(Date.now()); // 누적
             if (seeds.length % 3 === 0) {
-              console.log(seeds.length);
               skillDamage *= 2;
 
               if (Math.random() < critChance) {
+                critSunSeedUsed += 1;
                 const criticalDamage = skillDamage * critDamage;
                 total += criticalDamage;
                 sunSeedTotal += criticalDamage;
@@ -320,16 +329,26 @@ export default function AwackHailyTestPanel({
           }
         }
 
+        if (Math.random() < critChance && !isSkill) {
+          isCrit = true;
+          critDefaultUsed += 1;
+          damage *= 1 + petDefaultDamage;
+          damage *= critDamage;
+          defaultTotal += damage;
+          defaultUsed += 1;
+          total += damage;
+          // console.log(`치명타 발생! 💥 ${damage.toFixed(0)} 피해`);
+        }
+
         // 💬 일반 공격
         if (!isCrit && !isSkill) {
           damage *= 1 + petDefaultDamage;
           defaultTotal += damage;
           defaultUsed += 1;
           oneDefaultDamage = damage;
+          total += damage;
         }
       }
-
-      total += damage;
 
       setTotalDamage(total);
       setAttackCount(attackCounter);
@@ -343,6 +362,9 @@ export default function AwackHailyTestPanel({
       setOneDefaultDamage(oneDefaultDamage);
       setOneSunLayDamage(oneSunLayDamage);
       setOneSunSeedDamage(oneSunSeedDamage);
+      setDefaultCritTotal(critDefaultUsed);
+      setSunLayCritTotal(critSunLayUsed);
+      setSunSeedCritTotal(critSunSeedUsed);
       setPendingSeeds([...seeds]);
     }, 1000 / aps);
 
@@ -408,6 +430,8 @@ export default function AwackHailyTestPanel({
             } else {
               setFlareDamageTotal(0);
               setTotalDamage(0);
+              setSunLayDamageTotal(0);
+              setSunSeedDamageTotal(0);
               setAttackCount(0);
               setOneDefaultDamage(0);
               setOneSunLayDamage(0);
@@ -481,6 +505,13 @@ export default function AwackHailyTestPanel({
                 <div>{sunLayUseTotal.toLocaleString()}</div>
                 <div>{sunSeedUseTotal.toLocaleString()}</div>
                 <div>{flareUseTotal.toLocaleString()}</div>
+              </li>
+              <li className={styles.tbody}>
+                <div>치명타 발생</div>
+                <div>{defaultCritTotal.toLocaleString()}</div>
+                <div>{sunLayCritTotal.toLocaleString()}</div>
+                <div>{sunSeedCritTotal.toLocaleString()}</div>
+                <div>{flareCritTotal.toLocaleString()}</div>
               </li>
               <li className={styles.tbody}>
                 <div>1회 피해량</div>

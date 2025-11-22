@@ -1,13 +1,19 @@
 export const heroList = [
   {
-    value: "haily",
+    enName: "haily",
     label: "헤일리",
     gender: "human",
     type: "magic",
   },
   {
-    value: "awackHaily",
+    enName: "awackHaily",
     label: "각성 헤일리",
+    gender: "human",
+    type: "magic",
+  },
+  {
+    enName: "reaperDian",
+    label: "사신 다이안",
     gender: "human",
     type: "magic",
   },
@@ -52,7 +58,7 @@ export const heroStat = {
         percent: 0, //스킬 사용 확률(마나 타입이라 0)
         power: 50, //공격력의 증가량 퍼센트
         damage: 50, //모든 스킬 피해니까 피해량 퍼센트
-        duratiion: 30, //지속시간
+        duration: 30, //지속시간
       },
     },
     levelStat: [
@@ -131,7 +137,7 @@ export const heroStat = {
         percent: 0, //스킬 사용 확률(마나 타입이라 0)
         power: 50, //공격력의 증가량 퍼센트
         damage: 50, //모든 스킬 피해니까 피해량 퍼센트
-        duratiion: 10, //지속시간
+        duration: 10, //지속시간
       },
     },
     levelStat: [
@@ -167,6 +173,75 @@ export const heroStat = {
       {
         level: 12,
         desc: "[태초의 폭발] 스킬의 확률이 +5% 증가합니다",
+      },
+      {
+        level: 15,
+        desc: "공격력과 공격속도가 +10% 증가합니다",
+      },
+    ],
+  },
+  reaperDian: {
+    name: "사신 다이안",
+    gender: "human",
+    type: "magic",
+    skill: {
+      reaperEndowment: {
+        name: "사신의 자질",
+        desc: "적에게 피해를 줄 때 체력이 5% 미만인 적은 즉시 처형시킵니다.",
+      },
+      deathThunder: {
+        name: "죽음의 번개",
+        desc: "기본 공격이 범위 내 적에게 공격력의 2000% 마법피해로 적용됩니다.",
+        percent: 1, //스킬 사용 확률
+        power: 2000, //공격력의 증가량 퍼센트
+      },
+      relayThunder: {
+        name: "연쇄 번개",
+        desc: "확률로 적에게 공격력의 35000% 마법 피해를 입히고 10회만큼 주변 적에게 피해가 전달됩니다.",
+        percent: 0.08,
+        power: 350,
+      },
+      deathHand: {
+        name: "죽음의 손길",
+        manaDelay: 60, //마나가 채워지는 시간
+        desc: "20초 동안 지속되는 지옥을 소환해 0.1초마다 공격력의 600% 마법피해를 줍니다.",
+        power: 6, //공격력의 증가량 퍼센트
+        duration: 20, //지속시간
+      },
+    },
+    levelStat: [
+      { level: 1, defaultPower: 76171, defaultSpeed: 1.5 }, // 54.6k (주어짐)
+      { level: 2, defaultPower: 79999, defaultSpeed: 1.5 }, // 67.6k (주어짐)
+      { level: 3, defaultPower: 83827, defaultSpeed: 1.5 }, // 2->3: +3.52k (3.2*1.1)
+      { level: 4, defaultPower: 88038, defaultSpeed: 1.5 }, // 81.4k (고정, 주어짐)
+      { level: 5, defaultPower: 91866, defaultSpeed: 1.5 }, // +3.2k
+      { level: 6, defaultPower: 95694, defaultSpeed: 1.5 }, // 88.5k (고정, 주어짐)
+      { level: 7, defaultPower: 99522, defaultSpeed: 1.5 }, // 91.7k (고정, 주어짐)
+      { level: 8, defaultPower: 103350, defaultSpeed: 1.5 }, // 95.6k (고정, 주어짐)
+      { level: 9, defaultPower: 107178, defaultSpeed: 1.65 },
+      { level: 10, defaultPower: 111006, defaultSpeed: 1.65 }, // +3.2k
+      { level: 11, defaultPower: 114834, defaultSpeed: 1.65 }, // +3.2k
+      { level: 12, defaultPower: 118662, defaultSpeed: 1.65 }, // +3.2k
+      { level: 13, defaultPower: 122490, defaultSpeed: 1.65 }, // +3.2k
+      { level: 14, defaultPower: 126318, defaultSpeed: 1.65 }, // +3.2k
+      { level: 15, defaultPower: 130528, defaultSpeed: 1.8 }, // +3.2k
+    ],
+    levelEffect: [
+      {
+        level: 3,
+        desc: "공격력 +10% 증가합니다",
+      },
+      {
+        level: 6,
+        desc: "[연쇄 번개] 스킬의 확률이 +5% 증가합니다",
+      },
+      {
+        level: 9,
+        desc: "공격속도가 +10% 증가합니다",
+      },
+      {
+        level: 12,
+        desc: "[사신 승천] 확률이 +15% 증가합니다",
       },
       {
         level: 15,

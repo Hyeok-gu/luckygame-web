@@ -87,6 +87,7 @@ export default function ReaperDianTestPanel(props) {
 
   //죽음의 손길 발동 관리
   const deathHandControl = useSkillCycle({
+    isRunning: running,
     manaPerSec: computed.manaPerSec,
     manaReturn: artifactManaCallback,
     manaDelay: heroData.skill.deathHand.manaDelay,

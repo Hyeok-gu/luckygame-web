@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 export function useSkillCycle(options) {
   const {
+    isRunning,
     manaPerSec = 1,
     manaDelay,
     manaReturn,
@@ -75,6 +76,13 @@ export function useSkillCycle(options) {
 
         // 공격 루프 (중첩마다 새로 생성)
         const attackId = setInterval(() => {
+          if (!isRunning) {
+            clearInterval(attackId);
+            stackRef.current = 0;
+            onEnd && onEnd();
+            return;
+          }
+
           elapsed += interval;
           if (elapsed >= duration) {
             clearInterval(attackId);

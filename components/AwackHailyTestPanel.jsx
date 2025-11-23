@@ -95,8 +95,7 @@ export default function AwackHailyTestPanel({
   const [flareActive, setFlareActive] = useState(false);
   const [mana, setMana] = useState(0); // 0~100
   const [manaChargeTime, setManaChargeTime] = useState(
-    (flare.manaDelay - flare.manaDelay * artifactManaCallback) /
-      (1 + manaRecovery + petManaSpeed)
+    flare.manaDelay / (1 + manaRecovery + petManaSpeed)
   );
 
   const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간(초)
@@ -119,10 +118,7 @@ export default function AwackHailyTestPanel({
   }, [flareActive]);
 
   useEffect(() => {
-    setManaChargeTime(
-      (flare.manaDelay - flare.manaDelay * artifactManaCallback) /
-        (1 + manaRecovery + petManaSpeed)
-    );
+    setManaChargeTime(flare.manaDelay / (1 + manaRecovery + petManaSpeed));
   }, [manaRecovery, artifactStats]);
 
   useEffect(() => {
@@ -225,8 +221,8 @@ export default function AwackHailyTestPanel({
           setFlareActive(false);
           setUltimateActive(false);
           flareRef.current = false;
-          manaValue = 0;
-          setMana(0);
+          manaValue = artifactManaCallback * 100;
+          setMana(artifactManaCallback * 100);
           flareAttackCounter = 0;
           return;
         }
@@ -493,7 +489,7 @@ export default function AwackHailyTestPanel({
           <div style={{ fontSize: "12px", color: "#ccc" }}>
             마나: {mana.toFixed(1)}% / 충전속도
             {(1 + manaRecovery + petManaSpeed).toFixed(2)}배 (기본:
-            {flare.manaDelay}초, 마나회복속도 적용 후:{" "}
+            {flare.manaDelay}초, 마나회복속도 적용 후:
             {manaChargeTime.toFixed(2)}초)
           </div>
         </div>

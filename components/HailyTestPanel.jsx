@@ -90,8 +90,7 @@ export default function HailyTestPanel({
   const [supernovaActive, setSupernovaActive] = useState(false);
   const [mana, setMana] = useState(0); // 0~100
   const [manaChargeTime, setManaChargeTime] = useState(
-    (supernova.manaDelay - supernova.manaDelay * artifactManaCallback) /
-      (1 + manaRecovery + petManaSpeed)
+    supernova.manaDelay / (1 + manaRecovery + petManaSpeed)
   );
 
   const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간(초)
@@ -114,10 +113,7 @@ export default function HailyTestPanel({
   }, [supernovaActive]);
 
   useEffect(() => {
-    setManaChargeTime(
-      (supernova.manaDelay - supernova.manaDelay * artifactManaCallback) /
-        (1 + manaRecovery + petManaSpeed)
-    );
+    setManaChargeTime(supernova.manaDelay / (1 + manaRecovery + petManaSpeed));
   }, [manaRecovery, artifactStats]);
 
   useEffect(() => {
@@ -145,12 +141,6 @@ export default function HailyTestPanel({
     const manaMax = 100;
     const manaPerSec = manaMax / manaChargeTime;
 
-    // console.log(
-    //   `테스트 시작: 초당 공격 횟수=${aps}, 테스트 시간=${dur}, 예상≈${(
-    //     aps * dur
-    //   ).toFixed(2)}회`
-    // );
-
     // 🌟 초신성 발동 관리
     const startSupernovaCycle = () => {
       // 72초마다 자동 발동
@@ -170,7 +160,7 @@ export default function HailyTestPanel({
               setSupernovaActive(false);
               setUltimateActive(false);
               supernovaRef.current = false;
-              manaValue = 0;
+              manaValue = artifactManaCallback * 100;
               // console.log("🌠 초신성 종료. 마나 재충전 시작");
             }, supernova.duration * 1000);
           }

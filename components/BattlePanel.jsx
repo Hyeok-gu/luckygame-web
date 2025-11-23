@@ -25,6 +25,7 @@ const PET_CUSTOM_POWER = 0.0; //펫 개별 능력치 공격력 증가 퍼센트
 
 export default function BattlePanel(props) {
   const { onClose } = props;
+  const [isTesting, setIsTesting] = useState(false); //전투분석 중인지 상태 체크
   const [noteVisible, setNoteVisible] = useState(false); //개발자 노트 모달 상태
   const [heroData, setHeroData] = useState({}); //신화 정보
   const [petStats, setPetStats] = useState({}); //펫 정보
@@ -43,6 +44,12 @@ export default function BattlePanel(props) {
   const [isBoss, setIsBoss] = useState(false); //보스 공격 On상태
   const [sameTarget, setSameTarget] = useState(false); //같은 대상 공격 상태
   const [otherHeroLength, setOtherHeroLength] = useState(0); //다른 신화 종류 수
+
+  // useEffect(() => {
+  //   if (isTesting) {
+  //     alert("전투 중단 후 변경해야 반영됩니다.");
+  //   }
+  // }, [gold]);
 
   //로컬스토리지에 저장된 신화 정보 가져오기
   useEffect(() => {
@@ -220,6 +227,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>전설~불멸 강화</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="number"
                   inputMode="numeric"
@@ -240,6 +248,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>적 방어력 감소</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="number"
                   inputMode="numeric"
@@ -253,6 +262,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>골드량</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="text"
                   inputMode="numeric"
@@ -276,6 +286,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>마나회복%</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="number"
                   inputMode="numeric"
@@ -290,6 +301,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>공격력%</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="number"
                   inputMode="numeric"
@@ -304,6 +316,7 @@ export default function BattlePanel(props) {
               <div className={styles.statsBox}>
                 <span className={styles.indexTitle}>공격속도%</span>
                 <input
+                  disabled={isTesting}
                   className={`${styles.value} ${styles.input}`}
                   type="number"
                   inputMode="numeric"
@@ -318,6 +331,7 @@ export default function BattlePanel(props) {
                 <div className={styles.statsBox}>
                   <span className={styles.indexTitle}>다른 종류 신화 수</span>
                   <input
+                    disabled={isTesting}
                     className={`${styles.value} ${styles.input}`}
                     type="number"
                     inputMode="numeric"
@@ -332,6 +346,7 @@ export default function BattlePanel(props) {
             </div>
             <div className={styles.optionsWrapper}>
               <button
+                disabled={isTesting}
                 className={`${styles.optionButton} ${isBoss ? styles.on : ""}`}
                 onClick={() => setIsBoss(!isBoss)}
                 title="활성화 시 대검 유물 효과가 적용됩니다."
@@ -340,6 +355,7 @@ export default function BattlePanel(props) {
               </button>
               {heroData.enName === "awackHaily" && (
                 <button
+                  disabled={isTesting}
                   className={`${styles.optionButton} ${
                     sameTarget ? styles.on : ""
                   }`}
@@ -354,6 +370,7 @@ export default function BattlePanel(props) {
         </div>
         {heroData.enName === "haily" && (
           <HailyTestPanel
+            isTesting={(state) => setIsTesting(state)}
             finalPower={finalPower + heroData.defaultPower}
             finalSpeed={
               heroData.defaultSpeed *
@@ -370,6 +387,7 @@ export default function BattlePanel(props) {
         )}
         {heroData.enName === "awackHaily" && (
           <AwackHailyTestPanel
+            isTesting={(state) => setIsTesting(state)}
             finalPower={finalPower + heroData.defaultPower}
             finalSpeed={
               heroData.defaultSpeed *
@@ -388,6 +406,7 @@ export default function BattlePanel(props) {
         )}
         {heroData.enName === "reaperDian" && (
           <ReaperDianTestPanel
+            isTesting={(state) => setIsTesting(state)}
             finalPower={finalPower + heroData.defaultPower}
             finalSpeed={
               heroData.defaultSpeed *

@@ -7,6 +7,7 @@ import { useInstantSkill } from "@/hook/useInstantSkill";
 
 export default function ReaperDianTestPanel(props) {
   const {
+    isTesting,
     heroData,
     finalPower,
     finalSpeed,
@@ -62,9 +63,7 @@ export default function ReaperDianTestPanel(props) {
       petCriticalDamage;
 
     const manaChargeTime =
-      (heroData.skill.deathHand.manaDelay -
-        heroData.skill.deathHand.manaDelay * artifactManaCallback) /
-      (1 + manaRecovery + petManaSpeed);
+      heroData.skill.deathHand.manaDelay / (1 + manaRecovery + petManaSpeed);
 
     const manaPerSec = 100 / manaChargeTime;
 
@@ -89,6 +88,7 @@ export default function ReaperDianTestPanel(props) {
   //죽음의 손길 발동 관리
   const deathHandControl = useSkillCycle({
     manaPerSec: computed.manaPerSec,
+    manaReturn: artifactManaCallback,
     manaDelay: heroData.skill.deathHand.manaDelay,
     duration: heroData.skill.deathHand.duration,
     interval: 0.1,
@@ -99,6 +99,7 @@ export default function ReaperDianTestPanel(props) {
     critDamage: computed.critDamage,
     extraMultiplier: 1,
     setMana: (value) => setMana(value),
+    setDeathHandStack: (value) => setDeathHandStack(value),
     usedCrit: (value) => setCritDeathHandUseTotal(value),
 
     onCast: () => {
@@ -130,6 +131,7 @@ export default function ReaperDianTestPanel(props) {
   const [defaultUseTotal, setDefaultUseTotal] = useState(0); //연쇄번개 총 사용횟수
   const [relayThunderUseTotal, setRelayThunderUseTotal] = useState(0); //연쇄번개 총 사용횟수
   const [deathHandUseTotal, setDeathHandUseTotal] = useState(0); //죽음의 손길 총 사용횟수
+  const [deathHandStack, setDeathHandStack] = useState(0); //죽음의 손길 중첩 스택
 
   //영웅 누적 치명타 발생량
   const [critDefaultUseTotal, setCritDefaultUseTotal] = useState(0); //기본공격 총 치명타 발생 수
@@ -170,6 +172,11 @@ export default function ReaperDianTestPanel(props) {
     critUsed: () => setCritRelayThunderUseTotal((prev) => prev + 1),
   });
 
+  //전투분석 상태 변할 때마다 부모에게 전달.
+  useEffect(() => {
+    isTesting(running);
+  }, [running]);
+
   useEffect(() => {
     if (!running) return;
 
@@ -199,7 +206,6 @@ export default function ReaperDianTestPanel(props) {
 
     attackInterval = setInterval(() => {
       let isSkill = false;
-
       attackCounter += 1;
       //스킬 발동
       const relayThunderResult = relayThunderAttack.trigger();
@@ -237,7 +243,6 @@ export default function ReaperDianTestPanel(props) {
       setDefaultUseTotal(defaultUsed);
       //치명타 발생 수 체크
       setCritDefaultUseTotal(critDefaultUsed);
-      // setCritRelayThunderUseTotal(critRelayThunderUsed);
     }, 1000 / APS);
 
     // 테스트 종료 타이머
@@ -245,6 +250,7 @@ export default function ReaperDianTestPanel(props) {
       clearInterval(attackInterval);
       setRunning(false);
       setElapsedTime(testTime);
+      deathHandControl.stop();
     }, testTime * 1000);
 
     //언마운트 또는 종료 시 정리
@@ -285,6 +291,8 @@ export default function ReaperDianTestPanel(props) {
     setCritDeathHandUseTotal(0);
     setCritDeathHandUseTotal(0);
     setCritRelayThunderUseTotal(0);
+    setDeathHandStack(0);
+    deathHandControl.stop();
   }
 
   return (
@@ -337,6 +345,7 @@ export default function ReaperDianTestPanel(props) {
             죽음의 손길 발동:
             <strong style={{ color: deathHandActive ? "#ffeb3b" : "#aaa" }}>
               {deathHandActive ? " 발동됨" : " 회복 중"}
+              {deathHandStack > 1 && <>{" 중첩 " + (deathHandStack - 1)}</>}
             </strong>
           </div>
           {/* 🔋 마나 게이지 */}

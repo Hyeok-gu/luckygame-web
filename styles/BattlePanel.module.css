@@ -196,6 +196,10 @@
   padding: 0 12px;
 }
 
+.value.input[disabled] {
+  opacity: 0.5;
+}
+
 .enforceArea .statsBox {
   min-width: 0;
 }
@@ -232,6 +236,10 @@
 .optionsWrapper .optionButton.on {
   border: 1px solid var(--point-green);
   color: var(--point-green);
+}
+
+.optionsWrapper .optionButton[disabled] {
+  opacity: 0.4;
 }
 
 /* 개발자노트 */

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "@/styles/TestPannel.module.css";
 
 export default function HailyTestPanel({
+  isTesting,
   heroData,
   finalPower,
   finalSpeed,
@@ -96,6 +97,11 @@ export default function HailyTestPanel({
   const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간(초)
 
   const supernovaRef = useRef(false); // 👈 최신 상태 추적용 ref
+
+  //전투분석 상태 변할 때마다 부모에게 전달.
+  useEffect(() => {
+    isTesting(running);
+  }, [running]);
 
   //보스상대인지, 최종 공격력, 마나회복속도, 공격속도가 바뀔 때마다 기본 피해량 업데이트
   useEffect(() => {

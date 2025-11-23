@@ -203,7 +203,7 @@ export const heroStat = {
       },
       deathHand: {
         name: "죽음의 손길",
-        manaDelay: 60, //마나가 채워지는 시간
+        manaDelay: 90, //마나가 채워지는 시간
         desc: "20초 동안 지속되는 지옥을 소환해 0.1초마다 공격력의 600% 마법피해를 줍니다.",
         power: 6, //공격력의 증가량 퍼센트
         duration: 20, //지속시간

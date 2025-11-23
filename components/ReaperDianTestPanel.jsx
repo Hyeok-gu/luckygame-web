@@ -5,8 +5,6 @@ import styles from "@/styles/TestPannel.module.css";
 import { useSkillCycle } from "@/hook/useSkillCycle";
 import { useInstantSkill } from "@/hook/useInstantSkill";
 
-const DUR = 120; // 테스트 시간(초)
-
 export default function ReaperDianTestPanel(props) {
   const {
     heroData,
@@ -120,6 +118,7 @@ export default function ReaperDianTestPanel(props) {
 
   //테스트 상태값
   const [running, setRunning] = useState(false); //테스트 진행 상태
+  const [testTime, setTestTime] = useState(180);
   const [totalDamage, setTotalDamage] = useState(0); //총 피해량
   const [defaultDamageTotal, setDefaultDamageTotal] = useState(0); //기본공격 총 피해량
 
@@ -244,10 +243,9 @@ export default function ReaperDianTestPanel(props) {
     // 테스트 종료 타이머
     const stopTimer = setTimeout(() => {
       clearInterval(attackInterval);
-      resetData();
       setRunning(false);
-      setElapsedTime(DUR);
-    }, DUR * 1000);
+      setElapsedTime(testTime);
+    }, testTime * 1000);
 
     //언마운트 또는 종료 시 정리
     return () => {
@@ -292,13 +290,27 @@ export default function ReaperDianTestPanel(props) {
   return (
     <>
       <div className={styles.testArea}>
-        {elapsedTime >= DUR && (
+        {elapsedTime >= testTime && (
           <div className={styles.finishArea}>전투 측정이 종료되었습니다.</div>
         )}
         <div className={styles.timer}>
           <div className={styles.timerItem}>
-            <p className={styles.title}>전투 시간</p>
-            <p className={styles.dur}>{DUR}초</p>
+            <p className={styles.title}>전투 시간 (초 단위)</p>
+            <input
+              className={styles.testTimeInput}
+              type="number"
+              placeholder="측정 시간 입력"
+              value={testTime}
+              inputMode="numeric"
+              onChange={(e) => {
+                let value = Number(e.target.value);
+                if (value === 0 || value == null) {
+                  alert("초 단위로 입력하세요");
+                  value = 180;
+                }
+                setTestTime(value);
+              }}
+            ></input>
           </div>
           <div className={styles.timerItem}>
             <p className={styles.title}>경과 시간</p>

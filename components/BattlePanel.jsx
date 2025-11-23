@@ -267,7 +267,7 @@ export default function BattlePanel(props) {
                 />
                 <span className={styles.subDesc}>
                   머니건 효과:
-                  {Math.floor(artifactStats.artifactCoinPower * gold) / 100}%
+                  {((artifactStats.artifactCoinPower * gold) / 100).toFixed(1)}%
                 </span>
               </div>
             </div>

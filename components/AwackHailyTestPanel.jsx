@@ -40,7 +40,6 @@ export default function AwackHailyTestPanel({
   const artifactManaCallback = artifactStats.artifactManaCallback || 0; //궁극기 사용 시 마나 콜백
 
   const aps = finalSpeed ? finalSpeed : 1; // 최종 초당 공격 횟수
-  const dur = 120; // 테스트 시간(초)
 
   const critChance = 0.05 + artifactCriticalChance + petCriticalPercent; // 치명타 확률 (기본 5% 가정, + 유물 밤바 + 펫 종합 효과)
   const critDamage = 2.5 + artifactCriticalDamage + petCriticalDamage; // 치명타 피해 배수 (기본 250% + (마법피해만)유물 치명타 피해 + 펫 종합 효과)
@@ -71,7 +70,7 @@ export default function AwackHailyTestPanel({
   };
 
   const [baseDamage, setBaseDamage] = useState(defaultDamage); // 기본 공격(유물 피해 증가, 펫 종합 피해 증가, 유물 대검 보스 공격)
-
+  const [testTime, setTestTime] = useState(180);
   const [running, setRunning] = useState(false);
   const [totalDamage, setTotalDamage] = useState(0);
   const [defaultDamageTotal, setDefaultDamageTotal] = useState(0); //기본 공격 데미지 누적
@@ -369,8 +368,8 @@ export default function AwackHailyTestPanel({
     const stopTimer = setTimeout(() => {
       clearInterval(attackInterval);
       setRunning(false);
-      setElapsedTime(dur);
-    }, dur * 1000);
+      setElapsedTime(testTime);
+    }, testTime * 1000);
 
     // 언마운트 또는 종료 시 정리
     return () => {
@@ -404,13 +403,27 @@ export default function AwackHailyTestPanel({
   return (
     <>
       <div className={styles.testArea}>
-        {elapsedTime >= dur && (
+        {elapsedTime >= testTime && (
           <div className={styles.finishArea}>전투 측정이 종료되었습니다.</div>
         )}
         <div className={styles.timer}>
           <div className={styles.timerItem}>
-            <p className={styles.title}>전투 시간</p>
-            <p className={styles.dur}>{dur}초</p>
+            <p className={styles.title}>전투 시간 (초 단위)</p>
+            <input
+              className={styles.testTimeInput}
+              type="number"
+              placeholder="측정 시간 입력"
+              value={testTime}
+              inputMode="numeric"
+              onChange={(e) => {
+                let value = Number(e.target.value);
+                if (value === 0 || value == null) {
+                  alert("초 단위로 입력하세요");
+                  value = 180;
+                }
+                setTestTime(value);
+              }}
+            ></input>
           </div>
           <div className={styles.timerItem}>
             <p className={styles.title}>경과 시간</p>

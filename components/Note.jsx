@@ -132,8 +132,7 @@ export default function Note(props) {
             </span>
           </li>
           <li className={styles.item}>
-            - 마나회복은 현재 유물과 펫 등 아무것도 없는 계정에서, 신화만
-            얻어내어 기본 마나회복 시간을 기반으로 구현했습니다.
+            - 영웅별 마나회복 시간은 아래와 같습니다.
             <span className={styles.ex}>
               💡헤일리의 궁극기 마나회복 시간은 72초로 측정했습니다.
             </span>
@@ -141,7 +140,7 @@ export default function Note(props) {
               💡각성 헤일리의 궁극기 마나회복 시간은 90초로 측정했습니다.
             </span>
             <span className={styles.ex}>
-              💡사신 다이안의 궁극기 마나회복 시간은 60초로 측정했습니다.
+              💡사신 다이안의 궁극기 마나회복 시간은 90초로 측정했습니다.
             </span>
             <span className={styles.ex}>
               💡만약 신화의 쿨타임 및 마나회복 시간이 잘못 측정되었다면 구글폼을
@@ -167,6 +166,13 @@ export default function Note(props) {
           <li className={styles.item}>
             - 같은 대상 공격 ON 시, 각성 헤일리의 태초의 폭발이 3회 누적마다
             즉시 폭발하게 되도록 구현했습니다.
+          </li>
+          <li className={styles.item}>
+            - 입력한 코인은 똑같은데, 실제 게임과 머니건 효과 퍼센트가 다른
+            이유.
+            <span className={styles.ex}>
+              💡추측으로는 소수점 단위 절삭에 따른 퍼센트 차이로 보입니다.
+            </span>
           </li>
           <li className={styles.listTitle}>치명타에 관하여</li>
           <li className={styles.item}>

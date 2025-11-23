@@ -164,6 +164,9 @@
     margin-top: 0;
     overflow: visible;
   }
+  .timer {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 768px) {

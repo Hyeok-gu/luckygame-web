@@ -224,6 +224,7 @@ export default function BattlePanel(props) {
                 <input
                   className={`${styles.value} ${styles.input}`}
                   type="number"
+                  inputMode="numeric"
                   name="inGamePowerLevel"
                   placeholder="강화 레벨 입력"
                   value={inGamePowerLevel}
@@ -243,6 +244,7 @@ export default function BattlePanel(props) {
                 <input
                   className={`${styles.value} ${styles.input}`}
                   type="number"
+                  inputMode="numeric"
                   placeholder="감소 수치 입력"
                   value={inGameDefenseLevel}
                   onChange={(e) => {
@@ -254,7 +256,8 @@ export default function BattlePanel(props) {
                 <span className={styles.indexTitle}>골드량</span>
                 <input
                   className={`${styles.value} ${styles.input}`}
-                  type="text" // ← number → text 로 변경!
+                  type="text"
+                  inputMode="numeric"
                   placeholder="골드량 입력"
                   value={goldString}
                   onChange={(e) => {
@@ -277,6 +280,7 @@ export default function BattlePanel(props) {
                 <input
                   className={`${styles.value} ${styles.input}`}
                   type="number"
+                  inputMode="numeric"
                   placeholder="마나회복% 입력"
                   value={manaRecovery}
                   onChange={(e) => {
@@ -290,6 +294,7 @@ export default function BattlePanel(props) {
                 <input
                   className={`${styles.value} ${styles.input}`}
                   type="number"
+                  inputMode="numeric"
                   placeholder="공격력% 입력"
                   value={otherPower}
                   onChange={(e) => {
@@ -303,6 +308,7 @@ export default function BattlePanel(props) {
                 <input
                   className={`${styles.value} ${styles.input}`}
                   type="number"
+                  inputMode="numeric"
                   placeholder="공격속도% 입력"
                   value={otherSpeed}
                   onChange={(e) => {
@@ -316,6 +322,7 @@ export default function BattlePanel(props) {
                   <input
                     className={`${styles.value} ${styles.input}`}
                     type="number"
+                    inputMode="numeric"
                     placeholder="신화 종류 입력"
                     value={otherHeroLength}
                     onChange={(e) => {

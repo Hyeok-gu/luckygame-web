@@ -122,8 +122,6 @@ export default function BattlePanel(props) {
     setFinalPower(Math.round(result - heroData.defaultPower));
   };
 
-  console.log(heroData);
-
   return (
     <>
       <section className={styles.battleModal}>

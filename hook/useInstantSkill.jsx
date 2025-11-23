@@ -32,7 +32,6 @@ export function useInstantSkill(options) {
 
     if (Math.random() < critChance) {
       critUsed();
-      console.log("스킬 크리티컬 발생");
       finalDamage = skillDamage * critDamage;
     }
 

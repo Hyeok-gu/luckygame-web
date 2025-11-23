@@ -164,8 +164,8 @@
     margin-top: 0;
     overflow: visible;
   }
-  .timer {
-    flex-direction: column;
+  .testTimeInput {
+    width: 120px;
   }
 }
 

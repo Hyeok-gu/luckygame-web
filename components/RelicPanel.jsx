@@ -62,7 +62,6 @@ export default function RelicPanel({ refresh }) {
 
   useEffect(() => {
     const heroIndex = localStorage.getItem("herosTotalLevel") / 10;
-    console.log(heroIndex);
     setPetTotalLevel(localStorage.getItem("petTotalLevel") || 0);
     setHerosTotalLevel(localStorage.getItem("herosTotalLevel") || 0);
     setHerosStat(heroIndex * 0.5);
@@ -81,7 +80,6 @@ export default function RelicPanel({ refresh }) {
         : null;
 
       if (!lodedArtifactsLevel) {
-        console.log("조회된 유물 레벨이 없습니다.");
         return;
       } else {
         setPowerPotionLevel(lodedArtifactsLevel.powerPotionLevel);

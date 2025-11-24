@@ -37,6 +37,7 @@ export default function ReaperDianTestPanel(props) {
     petManaSpeed,
     petCriticalPercent,
     petCriticalDamage,
+    petBossDamage,
   } = petStats;
 
   const APS = useMemo(() => finalSpeed || 1, [finalSpeed]); // 최종 초당 공격 횟수
@@ -48,7 +49,7 @@ export default function ReaperDianTestPanel(props) {
     const petTotalDamage =
       heroData.type === "magic" ? petMagicDamage : petPhysicalDamage;
 
-    const bossDamage = isBoss ? artifactBossDamage : 0;
+    const bossDamage = isBoss ? artifactBossDamage + petBossDamage : 0;
 
     const defaultDamage =
       finalPower *
@@ -84,39 +85,6 @@ export default function ReaperDianTestPanel(props) {
     petManaSpeed,
     isBoss,
   ]);
-
-  //죽음의 손길 발동 관리
-  const deathHandControl = useSkillCycle({
-    isRunning: running,
-    manaPerSec: computed.manaPerSec,
-    manaReturn: artifactManaCallback,
-    manaDelay: heroData.skill.deathHand.manaDelay,
-    duration: heroData.skill.deathHand.duration,
-    interval: 0.1,
-    power: heroData.skill.deathHand.power,
-    baseDamage: computed.defaultDamage,
-    artifactSkillDamage,
-    critChance: computed.critChance,
-    critDamage: computed.critDamage,
-    extraMultiplier: 1,
-    setMana: (value) => setMana(value),
-    setDeathHandStack: (value) => setDeathHandStack(value),
-    usedCrit: (value) => setCritDeathHandUseTotal(value),
-
-    onCast: () => {
-      setDeathHandActive(true);
-      setDeathHandUseTotal((prev) => prev + 1);
-    },
-
-    onHit: (damage, cnt) => {
-      setDeathHandDamageTotal((prev) => prev + damage);
-      setOneDeathHandDamage(damage);
-    },
-
-    onEnd: () => {
-      setDeathHandActive(false);
-    },
-  });
 
   //테스트 상태값
   const [running, setRunning] = useState(false); //테스트 진행 상태
@@ -163,6 +131,38 @@ export default function ReaperDianTestPanel(props) {
         ? 0.13 + artifactSkillChance
         : 0.08 + artifactSkillChance, // 조건부 덮어쓰기
   };
+
+  //죽음의 손길 발동 관리
+  const deathHandControl = useSkillCycle({
+    manaPerSec: computed.manaPerSec,
+    manaReturn: artifactManaCallback,
+    manaDelay: heroData.skill.deathHand.manaDelay,
+    duration: heroData.skill.deathHand.duration,
+    interval: 0.1,
+    power: heroData.skill.deathHand.power,
+    baseDamage: computed.defaultDamage,
+    artifactSkillDamage,
+    critChance: computed.critChance,
+    critDamage: computed.critDamage,
+    extraMultiplier: 1,
+    setMana: (value) => setMana(value),
+    setDeathHandStack: (value) => setDeathHandStack(value),
+    usedCrit: (value) => setCritDeathHandUseTotal(value),
+
+    onCast: () => {
+      setDeathHandActive(true);
+      setDeathHandUseTotal((prev) => prev + 1);
+    },
+
+    onHit: (damage, cnt) => {
+      setDeathHandDamageTotal((prev) => prev + damage);
+      setOneDeathHandDamage(damage);
+    },
+
+    onEnd: () => {
+      setDeathHandActive(false);
+    },
+  });
 
   const relayThunderAttack = useInstantSkill({
     damage: computed.defaultDamage,
@@ -332,6 +332,7 @@ export default function ReaperDianTestPanel(props) {
               setRunning(false);
               setDeathHandActive(false);
               setMana(0);
+              setDeathHandStack(0);
             } else {
               resetData();
               setRunning(true);

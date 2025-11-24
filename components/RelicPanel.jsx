@@ -571,7 +571,6 @@ export default function RelicPanel({ refresh }) {
                       {Object.entries(petEffectTotals).map(([key, value]) => {
                         const isDisabled =
                           key === "단일 피해%" ||
-                          key === "보스몬스터 공격 시 피해%" ||
                           key === "범위 피해%" ||
                           key === "궁극기 피해%";
                         return (

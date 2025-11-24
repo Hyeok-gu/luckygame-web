@@ -69,6 +69,15 @@ export default function Note(props) {
           <li className={styles.item}>
             - 테스트 시, 헤일리는 별의 힘 10개를 모은 상태입니다.
           </li>
+          <li className={styles.item}>
+            - 영웅 레벨별로 기본공격력 정확한 수치가 필요합니다.
+            <span className={styles.ex}>
+              직접 확인되는대로 반영 중이나, 일부 레벨은 상이합니다.
+              <br />
+              영웅별 1레벨부터 15레벨까지 정확한 수치를 아시는 분은 구글폼을
+              통해 전달해 주시면 감사드리겠습니다.
+            </span>
+          </li>
           <li className={styles.listTitle}>보물과 유물</li>
           <li className={styles.item}>
             - 레벨별 효과가 적용되도록 개발했습니다.

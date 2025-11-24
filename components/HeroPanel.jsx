@@ -200,7 +200,7 @@ export default function HeroPanel({ refreshAction }) {
             </div>
           </>
         ) : (
-          <div className={styles.heroBox}>
+          <div className={`${styles.heroBox} ${styles.heroEmptyBox}`}>
             <span>영웅 정보를 불러오고 있습니다.</span>
           </div>
         )}

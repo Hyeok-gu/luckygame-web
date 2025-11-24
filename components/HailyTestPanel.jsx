@@ -38,6 +38,7 @@ export default function HailyTestPanel({
   const artifactCriticalChance = artifactStats.artifactCriticalPercent / 100; //밤바인형 치명타 확률 증가 ex.0.032
   const artifactSkillChance = artifactStats.artifactSkillChance || 0; //스킬 발동 확률
   const artifactBossDamage = isBoss ? artifactStats.artifactBossDamage : 0; //보스에게 가하는 피해
+  const petBossDamage = isBoss ? petStats.petBossDamage : 0; //보스에게 가하는 피해
   const artifactManaCallback = artifactStats.artifactManaCallback || 0; //궁극기 사용 시 마나 콜백
 
   const aps = finalSpeed ? finalSpeed : 1; // 최종 초당 공격 횟수
@@ -47,8 +48,11 @@ export default function HailyTestPanel({
 
   const defaultDamage =
     finalPower *
-      (1 + artifactDefaultDamage + petTotalDamage + artifactBossDamage) ||
-    10000; // 기본 공격(유물 피해 증가, 펫 종합 피해 증가, 유물 대검 보스 공격)
+      (1 +
+        artifactDefaultDamage +
+        petTotalDamage +
+        artifactBossDamage +
+        petBossDamage) || 10000; // 기본 공격(유물 피해 증가, 펫 종합 피해 증가, 유물 대검 보스 공격)
 
   const lightLay = {
     name: "빛의 광선",

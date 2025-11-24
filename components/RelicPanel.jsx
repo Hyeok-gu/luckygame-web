@@ -635,7 +635,7 @@ export default function RelicPanel({ refresh }) {
         </div>
         <div className={styles.emptyBox}>
           펫별 능력치 & 블롭 피규어는 현재 준비중입니다.
-          <p>사실 개발자가 아직 피규어 기능을 못 열었어요.</p>
+          <p>사실 해당 서비스 제작자가 아직 피규어 기능을 못 열었어요.</p>
         </div>
       </div>
     </div>

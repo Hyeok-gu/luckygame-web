@@ -26,7 +26,7 @@ const PET_CUSTOM_POWER = 0.0; //펫 개별 능력치 공격력 증가 퍼센트
 export default function BattlePanel(props) {
   const { onClose } = props;
   const [isTesting, setIsTesting] = useState(false); //전투분석 중인지 상태 체크
-  const [noteVisible, setNoteVisible] = useState(false); //개발자 노트 모달 상태
+  const [noteVisible, setNoteVisible] = useState(false); //서비스 제작자 모달 상태
   const [heroData, setHeroData] = useState({}); //신화 정보
   const [petStats, setPetStats] = useState({}); //펫 정보
   const [heroStats, setHeroStats] = useState({}); //영웅종합버프 정보
@@ -156,9 +156,9 @@ export default function BattlePanel(props) {
                   setNoteVisible(true);
                 }}
                 className={styles.controlButton}
-                title="개발자 노트"
+                title="서비스 제작자 노트"
               >
-                <span>개발자 노트입니다.</span>
+                <span>서비스 제작자 노트입니다.</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="24px"

@@ -16,6 +16,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
+      <meta
+        name="description"
+        content="운빨존많겜 신화영웅을 테스트하세요."
+      ></meta>
       <body className={pretendard.className}>{children}</body>
     </html>
   );
